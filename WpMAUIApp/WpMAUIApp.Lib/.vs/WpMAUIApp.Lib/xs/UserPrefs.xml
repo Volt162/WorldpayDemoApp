@@ -1,0 +1,27 @@
+﻿<Properties StartupConfiguration="{A829C751-25FF-47DB-8C7F-86250B82340C}|Default">
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.ItemProperties.WpMAUIApp.Lib PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="WpMAUIApp.Lib/WpMAUIApp.Lib.csproj">
+    <Files>
+      <File FileName="WpMAUIApp.Lib/WpMAUIApp.Lib.csproj" Line="1" Column="1" />
+      <File FileName="WpMAUIApp.Lib/LibSetup.cs" />
+      <File FileName="WpMAUIApp.Lib/Services/IPaymentSdkService.cs" Line="7" Column="1" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="WpMAUIApp.Lib" expanded="True">
+            <Node name="WpMAUIApp.Lib" expanded="True">
+              <Node name="Services" expanded="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+</Properties>

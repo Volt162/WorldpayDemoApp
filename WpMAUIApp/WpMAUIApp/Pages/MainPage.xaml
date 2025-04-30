@@ -1,0 +1,322 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:BaseContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                       xmlns:pages="clr-namespace:WpMAUIApp.Pages"
+                       xmlns:viewModels="clr-namespace:WpMAUIApp.ViewModels"
+                       HideSoftInputOnTapped="True"
+                       x:Class="WpMAUIApp.Pages.MainPage">
+    <ScrollView>
+        <Grid RowDefinitions="0.3*,0.5*,0.2*"
+              BackgroundColor="{StaticResource Gray100}"
+              RowSpacing="10">
+            <!--Scanning-->
+            <Border Grid.Row="0"
+                    Stroke="{StaticResource White}"
+                    StrokeShape="RoundRectangle 0,0,40,40"
+                    Background="{StaticResource White}">
+                <Grid RowDefinitions="Auto,1*,Auto" Padding="10">
+                    <Label Text="Discovered devices" HorizontalOptions="Center"
+                           IsVisible="True">
+                        <Label.Triggers>
+                            <DataTrigger TargetType="Label" Binding="{Binding IsScanning}" Value="True">
+                                <Setter Property="IsVisible" Value="False" />
+                            </DataTrigger>
+                        </Label.Triggers>
+                    </Label>
+                    <HorizontalStackLayout BackgroundColor="{StaticResource White}"
+                                           HeightRequest="20"
+                                           VerticalOptions="Start"
+                                           HorizontalOptions="Center"
+                                           Spacing="10"
+                                           Padding="70,0"
+                                           IsVisible="{Binding IsScanning}">
+                        <ActivityIndicator IsRunning="True" WidthRequest="20"/>
+                        <Label Text="Scanning..."   HorizontalOptions="Center"/>
+                    </HorizontalStackLayout>
+                    <CollectionView Grid.Row="1"
+                                    Margin="0,10"
+                                    SelectionMode="Single"
+                                    ItemsSource="{Binding Devices}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <VerticalStackLayout Padding="10" Spacing="5"
+                                                     BackgroundColor="{StaticResource White}">
+                                    <Label Text="{Binding DisplayTitle}" />
+                                    <Label Text="{Binding DisplaySubtitle}" FontSize= "11"/>
+                                    <VerticalStackLayout.GestureRecognizers>
+                                        <TapGestureRecognizer
+                                            Command="{Binding Source={RelativeSource AncestorType={
+                                            x:Type viewModels:MainPageViewModel}}, Path=DeviceSelectedCommand}"
+                                            CommandParameter="{Binding .}"/>
+                                    </VerticalStackLayout.GestureRecognizers>
+                                </VerticalStackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                    <Button Grid.Row="2"
+                            Text="Scan"
+                            HorizontalOptions="Center"
+                            MinimumWidthRequest="150"
+                            IsEnabled="False"
+                            Command="{Binding ScanDevicesCommand}">
+                        <Button.Triggers>
+                            <MultiTrigger TargetType="Button">
+                                <MultiTrigger.Conditions>
+                                    <BindingCondition Binding="{Binding IsScanning}" Value="False"/>
+                                    <BindingCondition Binding="{Binding IsConnected}" Value="False"/>
+                                    <BindingCondition Binding="{OnPlatform iOS={Binding IsInitialized}}" Value="{OnPlatform iOS=True}" />
+                                    <BindingCondition Binding="{Binding IsSalesProcessing}" Value="False" />
+                                </MultiTrigger.Conditions>
+                                <Setter Property="IsEnabled" Value="True" />
+                            </MultiTrigger>
+                        </Button.Triggers>
+                    </Button>
+                    <StackLayout Grid.RowSpan="3" BackgroundColor="White"
+                                 IsVisible="{Binding IsPaired}"
+                                 Spacing="15">
+                         <Label Text="Device is paired"
+                               FontSize="Medium"
+                                FontAttributes="Bold"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center"
+                               VerticalOptions="EndAndExpand"/>
+                        <Label Text="{Binding PairedText}"
+                                
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center"
+                               VerticalOptions="StartAndExpand"/>
+                    </StackLayout>
+                </Grid>
+            </Border>
+            <!--Info-->
+            <Border Grid.Row="1"
+                    x:Name="border"
+                    Stroke="{StaticResource White}"
+                    StrokeShape="RoundRectangle 40"
+                    Background="{StaticResource White}">
+                <ScrollView x:Name="scroll">
+                    <StackLayout Padding="20,10">
+                        <Label Text="Info " Margin="0,0,0,0" HorizontalOptions="Center"/>
+                        <Label Text="States " Margin="0,0,0,10"/>
+                        <!--States-->
+                        <Grid ColumnDefinitions="1*,1*">
+                            <HorizontalStackLayout>
+                                <Label Text="IsInitialized: "/>
+                                <Label Text="True" TextColor="Green">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label" Binding="{Binding IsInitialized}" Value="False">
+                                            <Setter Property="Text" Value="False" />
+                                            <Setter Property="TextColor" Value="{StaticResource Gray400}" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout Grid.Column="1">
+                                <Label Text="Device state: "/>
+                                <StackLayout>
+                                    <Label LineBreakMode="TailTruncation"
+                                           Text="{Binding CurrentDeviceState}"
+                                           TextColor="{StaticResource Blue}"/>
+                                </StackLayout>
+                            </HorizontalStackLayout>
+                        </Grid>
+                        <Grid ColumnDefinitions="1*,1*" Margin="0,5,0,0">
+                            <HorizontalStackLayout Grid.Column="0">
+                                <Label Text="IsConnected: "/>
+                                <Label Text="True" TextColor="Green">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label" Binding="{Binding IsConnected}" Value="False">
+                                            <Setter Property="Text" Value="False" />
+                                            <Setter Property="TextColor" Value="{StaticResource Gray400}" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout Grid.Column="1" Spacing="6" >
+                                <Label Text="Device Info "/>
+                                <Border Stroke="{StaticResource Blue}"
+                                        StrokeThickness="1.5"
+                                        StrokeShape="RoundRectangle 25"
+                                        Background="{StaticResource White}"
+                                        WidthRequest="25" HeightRequest="25"
+                                        TranslationY="-3">
+                                    <Label Text="i"  
+                                           FontAttributes="Bold"
+                                           TextColor="{StaticResource Blue}"
+                                           VerticalOptions="Center"
+                                           HorizontalOptions="Center"
+                                           VerticalTextAlignment="Center"
+                                           HorizontalTextAlignment="Center">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label" Binding="{Binding IsConnected}" Value="False">
+                                                <Setter Property="TextColor" Value="{StaticResource Gray200}" />
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Label" Binding="{Binding IsSalesProcessing}" Value="True">
+                                                <Setter Property="TextColor" Value="{StaticResource Gray200}" />
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
+                                    <Border.Triggers>
+                                        <DataTrigger TargetType="Border" Binding="{Binding IsConnected}" Value="False">
+                                            <Setter Property="Stroke" Value="{StaticResource Gray200}" />
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Border" Binding="{Binding IsSalesProcessing}" Value="True">
+                                            <Setter Property="Stroke" Value="{StaticResource Gray200}" />
+                                        </DataTrigger>
+                                    </Border.Triggers>
+                                </Border>
+                                <HorizontalStackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding ShowDeviceInfoCommand}"/>
+                                </HorizontalStackLayout.GestureRecognizers>
+                            </HorizontalStackLayout>
+                        </Grid>
+                        <!--Options-->
+                        <Label Text="Options " Margin="0,5,0,10"/>
+                        <Grid ColumnDefinitions="1*,1*"
+                              VerticalOptions="StartAndExpand">
+                            <Button Grid.Column="0"
+                                    Text="Init SDK"
+                                    HorizontalOptions="Center"
+                                    MinimumWidthRequest="150"
+                                    IsEnabled="False"
+                                    Command="{Binding InitSDKCommand}">
+                                <Button.Triggers>
+                                    <DataTrigger TargetType="Button" Binding="{Binding IsInitialized}" Value="False">
+                                        <Setter Property="IsEnabled" Value="{OnPlatform Android=False, iOS=True}" />
+                                    </DataTrigger>
+                                </Button.Triggers>
+                            </Button>
+                            <Button Grid.Column="1"
+                                    Text="Reset SDK"
+                                    HorizontalOptions="Center"
+                                    MinimumWidthRequest="150"
+                                    IsEnabled="False"
+                                    Command="{Binding ResetCommand}">
+                                <Button.Triggers>
+                                    <MultiTrigger TargetType="Button">
+                                        <MultiTrigger.Conditions>
+                                            <BindingCondition Binding="{Binding IsConnected}" Value="True"/>
+                                            <BindingCondition Binding="{Binding IsInitialized}" Value="True" />
+                                            <BindingCondition Binding="{Binding IsSalesProcessing}" Value="False" />
+                                        </MultiTrigger.Conditions>
+                                        <Setter Property="IsEnabled" Value="True" />
+                                    </MultiTrigger>
+                                </Button.Triggers>
+                            </Button>
+                        </Grid>
+                        <HorizontalStackLayout BackgroundColor="{StaticResource White}"
+                                               HorizontalOptions="Start"
+                                               VerticalOptions="EndAndExpand"
+                                               Spacing="0"
+                                               Padding="0,10,0,0">
+                            <Label Text="Bbpos text: " HorizontalOptions="Start"/>
+                            <Label Text="{Binding DisplayText}" LineBreakMode="TailTruncation"  
+                                    FontAttributes="Bold" TextColor="{StaticResource Primary}"
+                                    HorizontalOptions="Start"/>
+                        </HorizontalStackLayout>
+                        <!--Make sale-->
+                        <Grid Margin="0,5,0,5">
+                            <Label Text="Make sale"  />
+                            <HorizontalStackLayout BackgroundColor="{StaticResource White}"
+                                                   HeightRequest="20"
+                                                   HorizontalOptions="Start"
+                                                   Spacing="10"
+                                                   Padding="0,0"
+                                                   IsVisible="{Binding IsSalesProcessing}">
+                                <ActivityIndicator IsRunning="True" WidthRequest="20"/>
+                                <Label Text="Processing sale..." HorizontalOptions="Start"/>
+                            </HorizontalStackLayout>
+                        </Grid>
+                        <Grid RowDefinitions="1*,1*">
+                            <Entry Grid.Row="0"
+                                   Text="{Binding Amount}"
+                                   VerticalOptions="Start"
+                                   x:Name="amount"
+                                   Margin="{OnPlatform Android='0,0,0,5', iOS='0,0,0,15'}"
+                                   HorizontalOptions="Fill"
+                                   Keyboard="Numeric"
+                                   TextChanged="SfUraniumTextFieldTextChanged"
+                                   Focused="AmountFocused"
+                                   Unfocused="AmountUnfocused"
+                                   Placeholder="Amount"
+                                   IsEnabled="False">
+                                <Entry.Triggers>
+                                    <MultiTrigger TargetType="Entry">
+                                        <MultiTrigger.Conditions>
+                                            <BindingCondition Binding="{Binding IsConnected}" Value="True"/>
+                                            <BindingCondition Binding="{Binding IsInitialized}" Value="True" />
+                                            <BindingCondition Binding="{Binding IsSalesProcessing}" Value="False" />
+                                        </MultiTrigger.Conditions>
+                                        <Setter Property="IsEnabled" Value="True" />
+                                    </MultiTrigger>
+                                </Entry.Triggers>
+                            </Entry>
+                            <Grid ColumnDefinitions="1*,1*"
+                                  Grid.Row="1">
+                                <Button Text="Make sale"
+                                        HorizontalOptions="Center"
+                                        VerticalOptions="End"
+                                        MinimumWidthRequest="150"
+                                        IsEnabled="False"
+                                        Command="{Binding MakeSaleCommand}">
+                                    <Button.Triggers>
+                                        <MultiTrigger TargetType="Button">
+                                            <MultiTrigger.Conditions>
+                                                <BindingCondition Binding="{Binding IsConnected}" Value="True"/>
+                                                <BindingCondition Binding="{Binding IsInitialized}" Value="True" />
+                                                <BindingCondition Binding="{Binding IsSalesProcessing}" Value="False" />
+                                            </MultiTrigger.Conditions>
+                                            <Setter Property="IsEnabled" Value="True" />
+                                        </MultiTrigger>
+                                    </Button.Triggers>
+                                </Button>
+                                <Button Grid.Column="1"
+                                        Text="Stop flow"
+                                        HorizontalOptions="Center"
+                                        VerticalOptions="End"
+                                        MinimumWidthRequest="150"
+                                        IsEnabled="{Binding IsSalesProcessing}"
+                                        Command="{Binding StopCurrentFlowCommand}"/>
+                            </Grid>
+                        </Grid>
+                    </StackLayout>
+                </ScrollView>
+            </Border>
+            <!--Logs-->
+            <Border Grid.Row="2"
+                    Stroke="{StaticResource White}"
+                    StrokeShape="RoundRectangle 40,40,0,0"
+                    Background="{StaticResource White}">
+                <Grid RowDefinitions="Auto, 1*,1*" Padding="20,5">
+                    <Label Text="Logs" HorizontalOptions="Center"/>
+                    <ScrollView Grid.Row="1">
+                        <StackLayout>
+                            <Label Text="Prev status: " FontSize="11" TextColor="{StaticResource Blue}"/>
+                            <Label LineBreakMode="WordWrap" Text="{Binding PrevLogMessage}" FontSize="11"/>
+                        </StackLayout>
+                    </ScrollView>
+                    <ScrollView Grid.Row="2">
+                        <StackLayout >
+                            <Label Text="Latest status: " FontSize="11" TextColor="Blue"/>
+                            <Label LineBreakMode="WordWrap" Text="{Binding LatestLogMessage}" FontSize="11"/>
+                        </StackLayout>
+                    </ScrollView>
+                </Grid>
+            </Border>
+
+            <!--ActivityIndicator-->
+            <Grid Grid.RowSpan="3" IsVisible="{Binding IsBusy}">
+                <BoxView CornerRadius="40" Color="{StaticResource Gray900}"
+                         Opacity="0.3"
+                         BackgroundColor="Transparent"
+                         WidthRequest="200" HeightRequest="150"
+                         VerticalOptions="Center" HorizontalOptions="Center"/>
+                <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="15">
+                    <Label Text="{Binding BusyMessage}" FontAttributes="Bold" TextColor="White" VerticalOptions="Center" HorizontalOptions="Center"/>
+                    <ActivityIndicator IsRunning="True" VerticalOptions="Center" HorizontalOptions="Center" Color="{StaticResource White}"/>
+                </VerticalStackLayout>
+            </Grid>
+        </Grid>
+    </ScrollView>
+</pages:BaseContentPage>
+

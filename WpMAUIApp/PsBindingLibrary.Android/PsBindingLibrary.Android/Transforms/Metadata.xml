@@ -1,0 +1,24 @@
+﻿<metadata>
+  <attr path="/api/package[@name='com.paysimpleandroid.paysimpleandroidsdk.bbpos.PsListeners']/interface[@name='PsListener']/method[@name='updateResponse']/parameter[2]" name="managedType">string[]</attr>
+
+  <!-- Don't  need these packages for the Maui binding/public API --> 
+  <remove-node path="/api/package[starts-with(@name, 'com.google')]" />
+  <remove-node path="/api/package[starts-with(@name, 'kotlin')]" />
+  <remove-node path="/api/package[starts-with(@name, 'org.jetbrains')]" />
+  <remove-node path="/api/package[starts-with(@name, 'dagger')]" />
+  <remove-node path="/api/package[starts-with(@name, 'com.vantiv.triposmobilesdk')]" />
+  <remove-node path="/api/package[starts-with(@name, 'org.apache.logging.log4j')]" />
+  <remove-node path="/api/package[starts-with(@name, 'org.apache.commons.lang3')]" />
+  <remove-node path="/api/package[starts-with(@name, 'org.apache.commons.validator')]" />
+  <remove-node path="/api/package[starts-with(@name, 'org.apache.commons.io')]" />
+  <remove-node path="/api/package[starts-with(@name, 'io.realm')]" />
+  <remove-node path="/api/package[starts-with(@name, 'org.simpleframework')]" />
+  <remove-node path="/api/package[starts-with(@name, 'org.bson')]" />
+
+  <attr path="/api/package[@name='com.paysimpleandroid.paysimpleandroidsdk']/interface[@name='IPaysimpleBBPOS']/method[@name='getAvailableDevices']" name="propertyName"></attr>
+  <attr path="/api/package[@name='com.paysimpleandroid.paysimpleandroidsdk.bbpos']/class[@name='PaysimpleBBPOS']/method[@name='getAvailableDevices']" name="propertyName"></attr>
+  <attr path="/api/package[@name='com.paysimpleandroid.paysimpleandroidsdk']/interface[@name='IPaysimpleBBPOS']/method[@name='getDeviceInfo']" name="propertyName"></attr>
+  <attr path="/api/package[@name='com.paysimpleandroid.paysimpleandroidsdk.bbpos']/class[@name='PaysimpleBBPOS']/method[@name='getDeviceInfo']" name="propertyName"></attr>
+</metadata>
+
+
