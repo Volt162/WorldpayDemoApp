@@ -8,8 +8,8 @@ using WpMAUIApp.Lib.Services;
 
 namespace WpMAUIApp.ViewModels
 {
-	public partial class MainPageViewModel : BaseViewModel
-	{
+    public partial class MainPageViewModel : BaseViewModel
+    {
         private const string DeviceConnectedState = "Connected";
         private const string DeviceUpdatingState = "Updating"; 
         private const string DeviceUpdateFinishedState = "UpdateFinished";
@@ -21,9 +21,9 @@ namespace WpMAUIApp.ViewModels
         private readonly IPaymentSdkService _paymentSdkService;
         private string _token;
 
-		public MainPageViewModel(IPaymentSdkService paymentSdkService)
-		{
-			_paymentSdkService = paymentSdkService;
+        public MainPageViewModel(IPaymentSdkService paymentSdkService)
+        {
+            _paymentSdkService = paymentSdkService;
             _paymentSdkService.DeviceStateChanged = new Command<string>(OnDeviceStateChanged);
             _paymentSdkService.LogMessageChanged = new Command<string>(OnLogMessageChanged);
             _paymentSdkService.DisplayTextChanged = new Command<string>(OnBBposDisplayTextChanged);
@@ -441,7 +441,7 @@ namespace WpMAUIApp.ViewModels
 
             try
             {
-                var authRequest = new HttpRequestMessage(HttpMethod.Post, "https://admin.staging.servicefusion.com/workerAPI/list?method=authenticateworker");
+                var authRequest = new HttpRequestMessage(HttpMethod.Post, "https://admin.xxx.xxx.com/xxx/list?method=authenticateworker");
                 authRequest.Content = new StringContent(JsonConvert.SerializeObject(body));
                 var authResponse = await httpClient.SendAsync(authRequest);
                 var authResponseString = await authResponse.Content.ReadAsStringAsync();
@@ -451,7 +451,7 @@ namespace WpMAUIApp.ViewModels
                    "AuthToken")?.Value<string>();
 
 
-                var request = new HttpRequestMessage(HttpMethod.Post, "https://admin.staging.servicefusion.com/workerAPI/list?method=fusionPayGetEphemeralToken");
+                var request = new HttpRequestMessage(HttpMethod.Post, "https://admin.xxx.xxx.com/xxx/list?method=fusionPayGetEphemeralToken");
                 request.Content = new StringContent(JsonConvert.SerializeObject(new Auth { AuthToken = authToken }));
 
                 var result = await httpClient.SendAsync(request);
@@ -473,9 +473,9 @@ namespace WpMAUIApp.ViewModels
 
         public class Body
         {
-            public string CompanyID { get; set; } = "sftest18";
-            public string Username { get; set; } = "sftest18user";
-            public string Password { get; set; } = "Test@123";
+            public string CompanyID { get; set; } = "xxx";
+            public string Username { get; set; } = "xxx";
+            public string Password { get; set; } = "xxx";
 
             //public string CompanyID = "sftest105";
             //public string Username = "sftest105user";
