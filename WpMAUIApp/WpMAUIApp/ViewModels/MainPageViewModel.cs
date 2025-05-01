@@ -109,14 +109,6 @@ namespace WpMAUIApp.ViewModels
                 await Application.Current.MainPage.DisplayAlert("Warning", result.Message, "Ok");
             }
 
-            ///for testing
-            //await Task.Delay(1000);
-            //Devices = new List<PaymentDevice>()
-            //{
-            //    new PaymentDevice(){ Manufacturer = "HFC", Model = "33", BatteryPercentage = "80", IdNumber = "CHB202044007347"},
-            //    new PaymentDevice(){ Manufacturer = "HFC", Model = "44", BatteryPercentage = "50", IdNumber = "CHB202044007347"},
-            //    new PaymentDevice(){ Manufacturer = "HFC", Model = "55", BatteryPercentage = "70", IdNumber = "CHB202044007347"},
-            //};
             IsScanning = false;
         }
 
@@ -441,25 +433,10 @@ namespace WpMAUIApp.ViewModels
 
             try
             {
-                var authRequest = new HttpRequestMessage(HttpMethod.Post, "https://admin.xxx.xxx.com/xxx/list?method=authenticateworker");
-                authRequest.Content = new StringContent(JsonConvert.SerializeObject(body));
-                var authResponse = await httpClient.SendAsync(authRequest);
-                var authResponseString = await authResponse.Content.ReadAsStringAsync();
-
-                var data = JsonConvert.DeserializeObject(authResponseString) as JObject;
-                var authToken = data?.SelectToken(
-                   "AuthToken")?.Value<string>();
-
-
-                var request = new HttpRequestMessage(HttpMethod.Post, "https://admin.xxx.xxx.com/xxx/list?method=fusionPayGetEphemeralToken");
-                request.Content = new StringContent(JsonConvert.SerializeObject(new Auth { AuthToken = authToken }));
-
-                var result = await httpClient.SendAsync(request);
-                var response = await result.Content.ReadAsStringAsync();
+                var authRequest = new HttpRequestMessage(HttpMethod.Post, "https://xxx.xxx.xxx.com/xxx/list?method=authenticateworker");
+                ...
                 var paymentTokenData = JsonConvert.DeserializeObject(response) as JObject;
-                var paymentToken = paymentTokenData?.SelectToken(
-                   "Token")?.Value<string>();
-                Debug.WriteLine($"{paymentTokenData}");
+                ...
                 _token = paymentToken!;
                 return paymentToken!;
             }
@@ -476,10 +453,6 @@ namespace WpMAUIApp.ViewModels
             public string CompanyID { get; set; } = "xxx";
             public string Username { get; set; } = "xxx";
             public string Password { get; set; } = "xxx";
-
-            //public string CompanyID = "sftest105";
-            //public string Username = "sftest105user";
-            //public string Password = "Test@123";
         }
 
         public class Auth
